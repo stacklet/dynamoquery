@@ -226,16 +226,12 @@ class TestDynamoQuery:
         assert list(result.get_records()) == []
 
         with pytest.raises(DynamoQueryError):
-            DynamoQuery.build_update_item(
-                condition_expression=ConditionExpression("pk"),
-            ).table(
+            DynamoQuery.build_update_item(condition_expression=ConditionExpression("pk")).table(
                 table=table_resource_mock, table_keys=("pk", "sk")
             ).execute_dict({"pk": "value", "sk": "value", "test": "data"})
 
         with pytest.raises(DynamoQueryError):
-            DynamoQuery.build_update_item(
-                condition_expression=ConditionExpression("pk"),
-            ).table(
+            DynamoQuery.build_update_item(condition_expression=ConditionExpression("pk")).table(
                 table=table_resource_mock, table_keys=("pk", "sk")
             ).update(add=["test"],).execute_dict({"pk": "value", "sk": "value", "test": "data"})
 
