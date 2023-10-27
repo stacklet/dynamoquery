@@ -8,16 +8,16 @@ from dynamo_query.data_table import DataTable
 from dynamo_query.dynamo_query_types import (
     BatchGetItemOutputTypeDef,
     BatchWriteItemOutputTypeDef,
-    DeleteItemOutputTypeDef,
+    DeleteItemOutputTableTypeDef,
     DynamoDBClient,
     ExclusiveStartKey,
     FormatDict,
-    GetItemOutputTypeDef,
-    QueryOutputTypeDef,
-    ScanOutputTypeDef,
+    GetItemOutputTableTypeDef,
+    QueryOutputTableTypeDef,
+    ScanOutputTableTypeDef,
     Table,
     TableKeys,
-    UpdateItemOutputTypeDef,
+    UpdateItemOutputTableTypeDef,
 )
 from dynamo_query.enums import QueryType
 from dynamo_query.expressions import BaseExpression, ExpressionError, Operator
@@ -92,7 +92,7 @@ class BaseDynamoQuery(LazyLogger):
         limit: int = MAX_LIMIT,
         exclusive_start_key: Optional[ExclusiveStartKey] = None,
         consistent_read: bool = False,
-        logger: logging.Logger = None,
+        logger: Optional[logging.Logger] = None,
     ):
         self._lazy_logger = logger
         self._query_type = query_type
@@ -393,7 +393,9 @@ class BaseDynamoQuery(LazyLogger):
             for record in record_chunk:
                 key_data = {k: v for k, v in record.items() if k in self.table_keys}
                 key_data_list.append(key_data)
-            request_items = {table_name: {"Keys": key_data_list, "ConsistentRead": self._consistent_read}}
+            request_items = {
+                table_name: {"Keys": key_data_list, "ConsistentRead": self._consistent_read}
+            }
             response = self._batch_get_item(
                 RequestItems=request_items,
                 **self._extra_params,
@@ -458,27 +460,27 @@ class BaseDynamoQuery(LazyLogger):
         self._raw_responses.append(response)
         return response
 
-    def _execute_get_item(self, **kwargs: Any) -> GetItemOutputTypeDef:
+    def _execute_get_item(self, **kwargs: Any) -> GetItemOutputTableTypeDef:
         response = self.table_resource.get_item(**kwargs)
         self._raw_responses.append(response)
         return response
 
-    def _execute_update_item(self, **kwargs: Any) -> UpdateItemOutputTypeDef:
+    def _execute_update_item(self, **kwargs: Any) -> UpdateItemOutputTableTypeDef:
         response = self.table_resource.update_item(**kwargs)
         self._raw_responses.append(response)
         return response
 
-    def _execute_delete_item(self, **kwargs: Any) -> DeleteItemOutputTypeDef:
+    def _execute_delete_item(self, **kwargs: Any) -> DeleteItemOutputTableTypeDef:
         response = self.table_resource.delete_item(**kwargs)
         self._raw_responses.append(response)
         return response
 
-    def _execute_query(self, **kwargs: Any) -> QueryOutputTypeDef:
+    def _execute_query(self, **kwargs: Any) -> QueryOutputTableTypeDef:
         response = self.table_resource.query(**kwargs)
         self._raw_responses.append(response)
         return response
 
-    def _execute_scan(self, **kwargs: Any) -> ScanOutputTypeDef:
+    def _execute_scan(self, **kwargs: Any) -> ScanOutputTableTypeDef:
         response = self.table_resource.scan(**kwargs)
         self._raw_responses.append(response)
         return response

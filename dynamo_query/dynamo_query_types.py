@@ -19,16 +19,16 @@ if TYPE_CHECKING:
         BatchGetItemOutputTypeDef,
         BatchWriteItemOutputTypeDef,
         CreateTableOutputTypeDef,
-        DeleteItemOutputTypeDef,
-        GetItemOutputTypeDef,
+        DeleteItemOutputTableTypeDef,
+        GetItemOutputTableTypeDef,
         GlobalSecondaryIndexTypeDef,
         KeySchemaElementTypeDef,
         LocalSecondaryIndexTypeDef,
         ProjectionTypeDef,
         ProvisionedThroughputTypeDef,
-        QueryOutputTypeDef,
-        ScanOutputTypeDef,
-        UpdateItemOutputTypeDef,
+        QueryOutputTableTypeDef,
+        ScanOutputTableTypeDef,
+        UpdateItemOutputTableTypeDef,
     )
     from typing_extensions import Literal
 
@@ -67,11 +67,11 @@ else:
     Literal = object
     Table = object
     DynamoDBClient = object
-    GetItemOutputTypeDef = object
-    UpdateItemOutputTypeDef = object
-    DeleteItemOutputTypeDef = object
-    QueryOutputTypeDef = object
-    ScanOutputTypeDef = object
+    GetItemOutputTableTypeDef = object
+    UpdateItemOutputTableTypeDef = object
+    DeleteItemOutputTableTypeDef = object
+    QueryOutputTableTypeDef = object
+    ScanOutputTableTypeDef = object
     BatchGetItemOutputTypeDef = object
     BatchWriteItemOutputTypeDef = object
     CreateTableOutputTypeDef = object
@@ -103,11 +103,11 @@ __all__ = (
     "Literal",
     "Table",
     "DynamoDBClient",
-    "GetItemOutputTypeDef",
-    "UpdateItemOutputTypeDef",
-    "DeleteItemOutputTypeDef",
-    "QueryOutputTypeDef",
-    "ScanOutputTypeDef",
+    "GetItemOutputTableTypeDef",
+    "UpdateItemOutputTableTypeDef",
+    "DeleteItemOutputTableTypeDef",
+    "QueryOutputTableTypeDef",
+    "ScanOutputTableTypeDef",
     "BatchGetItemOutputTypeDef",
     "BatchWriteItemOutputTypeDef",
     "CreateTableOutputTypeDef",
