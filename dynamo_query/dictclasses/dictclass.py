@@ -165,10 +165,13 @@ class DictClass(dict):
         result: Dict[str, Any] = {
             "__annotations__": {},
         }
+        # Python 3.14 (PEP 649): __annotations__ is computed lazily via a type-level
+        # descriptor, so it no longer appears in dir(cls) and inspect.getmembers() won't
+        # find it. Collect annotations directly before the members loop.
+        result["__annotations__"].update(getattr(cls, "__annotations__", {}))
         for key, value in inspect.getmembers(cls):
             if key == "__annotations__":
-                result["__annotations__"].update(value)
-                continue
+                continue  # already collected via getattr() above
             if key in base_field_names:
                 continue
             result[key] = value
@@ -176,10 +179,10 @@ class DictClass(dict):
         base_classes = cls._get_base_classes(cls.__bases__)
         base_classes.reverse()
         for base_class in base_classes:
+            result["__annotations__"].update(getattr(base_class, "__annotations__", {}))
             for key, value in inspect.getmembers(base_class):
                 if key == "__annotations__":
-                    result["__annotations__"].update(value)
-                    continue
+                    continue  # already collected via getattr() above
                 if key in base_field_names or key in result:
                     continue
 
